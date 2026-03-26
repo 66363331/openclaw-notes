@@ -1,0 +1,21 @@
+{
+  "version": 1,
+  "skills": {
+    "tavily": {
+      "version": "1.0.0",
+      "installedAt": 1772271062103
+    },
+    "find-skills": {
+      "version": "0.1.0",
+      "installedAt": 1772327717349
+    },
+    "day-trading-skill": {
+      "version": "1.2.2",
+      "installedAt": 1772370113173
+    },
+    "rho-telegram-alerts": {
+      "version": "1.0.1",
+      "installedAt": 1772370118980
+    }
+  }
+}

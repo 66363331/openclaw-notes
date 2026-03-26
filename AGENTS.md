@@ -233,6 +233,17 @@ Context windows fill up. When they do, older messages get compacted or lost. **D
 
 **The Rule:** If it's important enough to remember, write it down NOW — not later.
 
+## 🛡️ 回答前自检清单（强制！）
+
+**遇到任何数字/数据类问题时，回答前必须过一遍：**
+1. 这个数字我查过工具了吗？
+2. 数据来源是哪？可靠的？
+3. 我的逻辑推导有没有漏洞？
+
+**没查 = 不答。宁可说"我查一下"，也不张口就猜。**
+
+---
+
 ## 🎯 任务执行优先级（必须遵循！）
 
 **做任何事情之前，先按以下优先级选择执行方式：**

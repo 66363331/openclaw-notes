@@ -1,0 +1,38 @@
+# QQ邮箱配置 - Himalaya
+# 请将 <YOUR_AUTH_CODE> 替换为你的QQ邮箱授权码
+
+[accounts.qq]
+email = "<YOUR_QQ>@qq.com"
+display-name = "HoneyRay"
+default = true
+
+# IMAP 收邮件配置
+[accounts.qq.backend]
+type = "imap"
+host = "imap.qq.com"
+port = 993
+encryption.type = "tls"
+login = "<YOUR_QQ>@qq.com"
+auth.type = "password"
+# 方式1: 直接写授权码（不推荐，不安全）
+# auth.type = "password"
+# auth.raw = "<YOUR_AUTH_CODE>"
+# 方式2: 使用环境变量（推荐）
+auth.cmd = "echo $QQ_EMAIL_AUTH_CODE"
+
+# SMTP 发邮件配置
+[accounts.qq.message.send.backend]
+type = "smtp"
+host = "smtp.qq.com"
+port = 465
+encryption.type = "tls"
+login = "<YOUR_QQ>@qq.com"
+auth.type = "password"
+# 方式1: 直接写授权码（不推荐）
+# auth.raw = "<YOUR_AUTH_CODE>"
+# 方式2: 使用环境变量（推荐）
+auth.cmd = "echo $QQ_EMAIL_AUTH_CODE"
+
+# 下载附件保存路径
+[accounts.qq.attachment]
+download-dir = "~/Downloads"

@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>XAUUSD 三指标联合作战手册</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0a0e17; color: #c8d6e5; padding: 20px; line-height: 1.7; }
+  .container { max-width: 900px; margin: 0 auto; }
+  h1 { font-size: 24px; color: #fff; text-align: center; padding: 20px 0; border-bottom: 2px solid #FFD740; margin-bottom: 30px; }
+  h2 { font-size: 18px; color: #FFD740; margin: 30px 0 16px; padding: 10px 16px; background: rgba(255,215,64,0.08); border-left: 3px solid #FFD740; border-radius: 0 6px 6px 0; }
+  h3 { font-size: 15px; color: #fff; margin: 20px 0 10px; }
+  p { margin: 8px 0; font-size: 14px; }
+  .section { background: #111827; border: 1px solid #1e2d3d; border-radius: 10px; padding: 20px; margin-bottom: 20px; }
+  .highlight { background: rgba(255,215,64,0.08); border: 1px solid rgba(255,215,64,0.2); border-radius: 8px; padding: 14px; margin: 12px 0; }
+  .danger { background: rgba(255,69,96,0.08); border: 1px solid rgba(255,69,96,0.2); border-radius: 8px; padding: 14px; margin: 12px 0; }
+  .success { background: rgba(0,227,150,0.08); border: 1px solid rgba(0,227,150,0.2); border-radius: 8px; padding: 14px; margin: 12px 0; }
+  .blue { background: rgba(0,143,251,0.08); border: 1px solid rgba(0,143,251,0.2); border-radius: 8px; padding: 14px; margin: 12px 0; }
+  strong { color: #fff; }
+  .tag { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 12px; font-weight: 600; }
+  .tag-red { background: rgba(255,69,96,0.15); color: #ff4560; }
+  .tag-green { background: rgba(0,227,150,0.15); color: #00e396; }
+  .tag-gold { background: rgba(254,176,25,0.15); color: #feb019; }
+  .tag-blue { background: rgba(0,143,251,0.15); color: #008ffb; }
+  .tag-gray { background: rgba(128,128,128,0.15); color: #8899aa; }
+  .tag-purple { background: rgba(208,112,208,0.15); color: #D070D0; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; margin: 10px 0; }
+  th { background: #0d1320; color: #8899aa; font-weight: 600; text-align: left; padding: 8px 10px; font-size: 11px; text-transform: uppercase; border-bottom: 1px solid #1e2d3d; }
+  td { padding: 8px 10px; border-bottom: 1px solid #141e2e; }
+  tr:hover td { background: #0d1320; }
+  .flow { display: flex; flex-direction: column; gap: 0; }
+  .flow-item { display: flex; align-items: stretch; gap: 0; }
+  .flow-left { width: 60px; display: flex; flex-direction: column; align-items: center; flex-shrink: 0; }
+  .flow-dot { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; flex-shrink: 0; }
+  .flow-line { width: 2px; flex: 1; min-height: 10px; }
+  .flow-right { flex: 1; padding: 6px 0 16px 0; }
+  .flow-right .title { font-size: 14px; font-weight: 700; color: #fff; }
+  .flow-right .desc { font-size: 13px; color: #8899aa; margin-top: 4px; }
+  .dot-green { background: rgba(0,227,150,0.2); color: #00e396; }
+  .dot-red { background: rgba(255,69,96,0.2); color: #ff4560; }
+  .dot-gold { background: rgba(254,176,25,0.2); color: #feb019; }
+  .dot-blue { background: rgba(0,143,251,0.2); color: #008ffb; }
+  .line-green { background: rgba(0,227,150,0.2); }
+  .line-red { background: rgba(255,69,96,0.2); }
+  .line-gold { background: rgba(254,176,25,0.2); }
+  .line-blue { background: rgba(0,143,251,0.2); }
+  .weight-bar { display: flex; align-items: center; gap: 8px; margin: 4px 0; }
+  .weight-fill { height: 8px; border-radius: 4px; }
+  .weight-label { font-size: 12px; color: #8899aa; min-width: 80px; }
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  @media (max-width: 700px) { .two-col { grid-template-columns: 1fr; } }
+  .term { color: #FFD740; }
+  .dim { color: #5a6a7a; }
+  .sep { height: 1px; background: #1e2d3d; margin: 16px 0; }
+  .big-num { font-size: 36px; font-weight: 700; text-align: center; }
+  .subtitle { text-align: center; color: #5a6a7a; font-size: 13px; margin-bottom: 20px; }
+</style>
+</head>
+<body>
+<div class="container">
+
+<h1>🎯 XAUUSD 三指标联合作战手册</h1>
+<div class="subtitle">SMC XAU v8 + 威科夫成交量 V8.1 + 波段回收 V2 ｜ 配合 EA V6.14</div>
+
+<!-- ==================== 0. 一句话总纲 ==================== -->
+<div class="section">
+  <div class="big-num" style="color:#FFD740;">H1 定方向 → M15 找位置 → M3 抠价格</div>
+  <p style="text-align:center;color:#8899aa;margin-top:8px;">每个周期只干一件事，不要在错误的周期做错误的事</p>
+</div>
+
+<!-- ==================== 1. 三个指标各管什么 ==================== -->
+<h2>一、三个指标各管什么</h2>
+<div class="section">
+  <table>
+    <thead>
+      <tr><th>指标</th><th>核心功能</th><th>你该看什么</th><th>不该看什么</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>SMC XAU v8</strong></td>
+        <td>结构 + 位置</td>
+        <td>哪里有供需区(Zone)、价格走到哪了、结构有没有变</td>
+        <td>不看它判断买卖时机</td>
+      </tr>
+      <tr>
+        <td><strong>威科夫 V8.1</strong></td>
+        <td>量能 + 确认</td>
+        <td>面板判断告诉你能不能做、市场有没有人在交易</td>
+        <td>不看它判断方向</td>
+      </tr>
+      <tr>
+        <td><strong>波段回收 V2</strong></td>
+        <td>趋势力度 + 仓位</td>
+        <td>反弹/回调力度在衰减还是增强、该用多大仓位</td>
+        <td>不看它独立判断方向（震荡日不适用）</td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="highlight">
+    <strong>三者的关系：</strong>SMC 告诉你"在哪里做"，威科夫告诉你"现在能不能做"，波段回收告诉你"该用多大胆子做"。<br>
+    SMC 是决策核心（必要条件），波段回收调仓位，威科夫是熔断器（只管否决）。<br>
+    SMC 满足 + 威科夫不亮红灯 = 可以进。波段回收决定用 0.03 还是 0.01。
+  </div>
+</div>
+
+<!-- ==================== 2. SMC 标记权重表 ==================== -->
+<h2>二、SMC 标记权重表（从高到低）</h2>
+<div class="section">
+  <p>图表上那么多标记，哪些最重要？按权重排序：</p>
+
+  <h3>🏆 S级（决定方向和位置的核心标记）</h3>
+  <table>
+    <thead><tr><th>标记</th><th>长什么样</th><th>含义（大白话）</th><th>你该怎么做</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><span class="tag tag-gold">CHoCH</span><br><span class="dim">趋势转折</span></td>
+        <td>金黄色横线 + "CHoCH" 文字</td>
+        <td><strong>方向可能要变了</strong>。多头CHoCH（金色向上）= 空转多的第一个信号。空头CHoCH（灰白向下）= 多转空的第一个信号</td>
+        <td>H1 出 CHoCH = 大方向转折，立刻重新评估所有持仓<br>M15 出 CHoCH = 波段方向变了，准备找新方向的入场</td>
+      </tr>
+      <tr>
+        <td><span class="tag tag-green">供需区 Zone</span><br><span class="dim">+触及①</span></td>
+        <td>红色矩形=供给区（上方阻力）<br>绿色矩形=需求区（下方支撑）<br>右上角 ① = 首次触及</td>
+        <td><strong>机构留下的订单堆积区</strong>。价格回到这里大概率有反应。① 首次触及是最好的入场机会</td>
+        <td>只在 ① 首次触及时找入场<br>② 第二次谨慎<br>③ 以上不做（zone已失效）</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>🥈 A级（提高入场质量的确认标记）</h3>
+  <table>
+    <thead><tr><th>标记</th><th>长什么样</th><th>含义</th><th>怎么用</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><span class="tag tag-gold">金边共振</span><br><span class="dim">Confluence</span></td>
+        <td>Zone 边框变成金色加粗</td>
+        <td>供需区 + FVG(价格缺口) 重叠 = <strong>最高概率位</strong></td>
+        <td>金边 Zone 的 ① 首次触及 = 最佳入场。值得多等一会儿</td>
+      </tr>
+      <tr>
+        <td><span class="tag tag-gold">Sweep ◆</span><br><span class="dim">流动性扫取</span></td>
+        <td>Zone 内部出现金色 ◆ 菱形</td>
+        <td>影线刺穿关键价位后收回 = <strong>机构扫完止损了</strong></td>
+        <td>Zone 内出现 ◆ = 入场确认信号。没有 ◆ 也可以进，有 ◆ 更好</td>
+      </tr>
+      <tr>
+        <td><span class="tag tag-blue">FVG</span><br><span class="dim">价格缺口</span></td>
+        <td>短矩形（红/绿半透明）</td>
+        <td>三根K线间的价格空白区 = 价格大概率会回来填补</td>
+        <td>FVG 和 Zone 重叠 = 金边共振（上面说的）<br>单独的 FVG 也可以当回调目标位</td>
+      </tr>
+      <tr>
+        <td><span class="tag tag-gold">BOS</span><br><span class="dim">结构突破</span></td>
+        <td>金色实线（通常没文字）</td>
+        <td>价格突破了前一个 Zone = <strong>趋势还在继续</strong></td>
+        <td>BOS 方向和你持仓一致 = 安心持有，EA 金字塔会加速<br>BOS 方向和持仓相反 = 考虑收紧止损</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>🥉 B级（辅助参考）</h3>
+  <table>
+    <thead><tr><th>标记</th><th>含义</th><th>用法</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><span class="tag tag-gray">HH/HL/LH/LL</span></td>
+        <td>结构标签：更高高点(HH)/更高低点(HL)/更低高点(LH)/更低低点(LL)</td>
+        <td>快速判断趋势方向。HH+HL 序列=多头；LH+LL 序列=空头<br>这些标签是事后确认（延迟），<strong>波段回收 V2 的实时估算更快</strong></td>
+      </tr>
+      <tr>
+        <td><span class="tag tag-red">EQH</span> / <span class="tag tag-green">EQL</span></td>
+        <td>等高(EQH)=上方止损池 / 等低(EQL)=下方止损池</td>
+        <td>预判机构可能去扫的位置。EQH 被扫后做空，EQL 被扫后做多<br>加分项，不是必要条件</td>
+      </tr>
+      <tr>
+        <td><span class="tag tag-blue">PDH/PDL</span></td>
+        <td>前一天最高价(PDH) / 前一天最低价(PDL)</td>
+        <td>日内重要参考位。早盘扫 PDH 或 PDL 后反转是黄金常见套路</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ==================== 3. H1 定方向 ==================== -->
+<h2>三、H1 — 定方向（10秒搞定）</h2>
+<div class="section">
+  <p>H1 只回答一个问题：<strong>今天做多还是做空？</strong></p>
+
+  <div class="two-col">
+    <div>
+      <h3>👀 看什么</h3>
+      <p>1. <strong>SMC v8 的 HH/HL/LH/LL 序列</strong></p>
+      <p style="margin-left:16px;">HH + HL 交替出现 = 多头<br>LH + LL 交替出现 = 空头<br>混乱 = 震荡（高抛低吸）</p>
+      <p>2. <strong>威科夫 V8.1 面板行0</strong></p>
+      <p style="margin-left:16px;">🟢 可做多 / 🔴 可做空 / 🔴禁手 / ⚪等待</p>
+      <p>3. <strong>最近的 H1 CHoCH</strong></p>
+      <p style="margin-left:16px;">如果刚出了空头 CHoCH → 方向可能从多转空</p>
+    </div>
+    <div>
+      <h3>📝 输出结果（三选一）</h3>
+      <div class="success"><strong>偏多</strong> → M15 只找做多机会</div>
+      <div class="danger"><strong>偏空</strong> → M15 只找做空机会</div>
+      <div class="highlight"><strong>震荡</strong> → M15 看上下沿 Zone，到上沿做空到下沿做多</div>
+      <div class="sep"></div>
+      <h3>⛔ 停手信号</h3>
+      <p>H1 刚出 CHoCH + 威科夫面板"没油了" + 价格在 H4 供给/需求区附近 → <strong>不开仓</strong></p>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== 4. M15 找位置（核心） ==================== -->
+<h2>四、M15 — 找位置（核心战场，重点展开）</h2>
+<div class="section">
+  <p>M15 是你的主战场。要回答三个问题：<strong>在哪个价位进？用多大仓位？现在能不能进？</strong></p>
+
+  <h3>第一步：确定可交易的 Zone</h3>
+  <div class="highlight">
+    <strong>核心规则：只在 Zone ① 首次触及时交易。</strong><br>
+    打开 M15 图表，从当前价格往上找最近的供给区（红色矩形），往下找最近的需求区（绿色矩形）。
+  </div>
+
+  <p><strong>Zone 质量排序（从高到低）：</strong></p>
+  <div class="weight-bar">
+    <span class="weight-label">金边① Zone</span>
+    <div class="weight-fill" style="width:100%;background:#FFD740;"></div>
+    <span class="dim">最佳 — Zone+FVG共振+首次触及</span>
+  </div>
+  <div class="weight-bar">
+    <span class="weight-label">普通① Zone</span>
+    <div class="weight-fill" style="width:75%;background:#50C878;"></div>
+    <span class="dim">正常 — 首次触及，无共振</span>
+  </div>
+  <div class="weight-bar">
+    <span class="weight-label">② Zone</span>
+    <div class="weight-fill" style="width:40%;background:#E8A030;"></div>
+    <span class="dim">谨慎 — 第二次触及，zone效力减弱</span>
+  </div>
+  <div class="weight-bar">
+    <span class="weight-label">③+ Zone</span>
+    <div class="weight-fill" style="width:15%;background:#E05555;"></div>
+    <span class="dim">不做 — zone已淡化失效</span>
+  </div>
+
+  <div class="sep"></div>
+
+  <h3>第二步：决策核心 + 两层过滤</h3>
+  <p>价格到了 Zone 附近，按优先级检查：</p>
+
+  <div class="highlight">
+    <strong>三个指标的角色重新定义（V8.1 修正）：</strong><br>
+    <strong>SMC = 决策核心</strong>（决定能不能做、在哪做）<br>
+    <strong>波段回收 = 仓位调节器</strong>（决定用多大仓位）<br>
+    <strong>威科夫 = 熔断器</strong>（只管否决，不管放行。不亮红灯 = 不影响进场）
+  </div>
+
+  <table>
+    <thead><tr><th>指标</th><th>角色</th><th>🟢 放行条件</th><th>🔴 否决条件</th><th>⚪ 没信号时</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><strong>SMC v8</strong><br><span class="tag tag-gold">决策核心</span></td>
+        <td>必要条件<br>缺了不做</td>
+        <td>Zone ① + H1方向一致<br>+ 有确认信号（CHoCH/◆/FVG任一）</td>
+        <td>Zone ③+ / 与H1方向矛盾<br>/ 无Zone可触及</td>
+        <td><strong>不进场</strong><br>SMC是前提，必须满足</td>
+      </tr>
+      <tr>
+        <td><strong>波段回收 V2</strong><br><span class="tag tag-blue">仓位调节</span></td>
+        <td>决定仓位大小</td>
+        <td>回收<70% + 方向一致<br>→ <strong>0.03手</strong></td>
+        <td>回收>85% + 方向矛盾<br>→ <strong>不进</strong></td>
+        <td><strong>用 0.01 试探仓</strong><br>信号不明确时降仓位</td>
+      </tr>
+      <tr>
+        <td><strong>威科夫 V8.1</strong><br><span class="tag tag-red">熔断器</span></td>
+        <td>只管否决<br>不管放行</td>
+        <td>🟢可做多/空 = 加分<br>（不是必要条件）</td>
+        <td>🔴禁手 → <strong>直接停手</strong><br>任何其他条件都无效</td>
+        <td><strong>不影响进场</strong><br>⚪等待/🟡留意 ≠ 不能做</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="success">
+    <strong>正常进场 = SMC 满足 + 威科夫不亮红灯</strong><br>
+    Zone ① + H1方向一致 + 威科夫不是禁手 → 可以进场<br>
+    波段回收决定仓位：回收<70% 用 0.03手，70-85% 用 0.01手，>85% 不进
+  </div>
+  <div class="highlight">
+    <strong>最佳进场 = 三指标全亮绿（加分项，不是必要条件）</strong><br>
+    SMC满足 + 波段回收方向一致<70% + 威科夫出假跌破/假突破 → 最高信心
+  </div>
+  <div class="danger">
+    <strong>威科夫 🔴禁手 = 一票否决</strong><br>
+    不管 SMC 多完美、波段回收多强 → 面板红灯就是不做
+  </div>
+  
+  <div class="blue">
+    <strong>💡 为什么威科夫不再是"开关"？</strong><br>
+    审计数据：威科夫面板全周只有 5.2% 的时间亮绿灯。如果等绿灯才做，你 95% 的时间被锁死。<br>
+    而你本周 12 笔交易大部分在"⚪等待"时根据 SMC 进场——结果都赚了。<br>
+    威科夫的真正价值是拦住危险行情（连续缩量/蓄力/拉锯），不是给进场开绿灯。
+  </div>
+
+  <div class="sep"></div>
+
+  <h3>第三步：算马丁安全余量</h3>
+  <p>准备进场前，最后一道防线：</p>
+  <table>
+    <thead><tr><th>当前价到反方向最近Zone的距离</th><th>判断</th><th>动作</th></tr></thead>
+    <tbody>
+      <tr><td><strong>> $60</strong></td><td><span class="tag tag-green">安全</span></td><td>正常开仓</td></tr>
+      <tr><td><strong>$45 - $60</strong></td><td><span class="tag tag-gold">偏紧</span></td><td>轻仓或等回调</td></tr>
+      <tr><td><strong>< $45</strong></td><td><span class="tag tag-red">不足</span></td><td><strong>不开仓</strong> — 马丁补仓空间不够</td></tr>
+    </tbody>
+  </table>
+  <p class="dim">波段回收 V2 面板的"仓位"行会自动计算这个（需要手动填入 Supply/Demand 价格）</p>
+
+  <div class="sep"></div>
+
+  <h3>第四步：识别"不要做"的结构</h3>
+  <div class="danger">
+    <strong>这些情况出现任一条 → 不开仓：</strong>
+    <p>1. M15 连续 2 次金字塔保本止损(PyrBE)被扫 → 市场在来回拉锯，等突破</p>
+    <p>2. 距反方向 Zone < $45 → 马丁空间不足</p>
+    <p>3. H1 刚出 CHoCH → 大方向可能反转</p>
+    <p>4. 威科夫面板"没油了" + 价格在 H4 供需区附近 → 趋势末段</p>
+    <p>5. 30分钟内有非农/CPI/FOMC → 数据行情不可预测</p>
+    <p>6. 波段回收面板 😴震荡 → ATR 太低，指标不适用</p>
+  </div>
+</div>
+
+<!-- ==================== 5. M15 盯盘结构详解 ==================== -->
+<h2>五、M15 盯盘结构 — 六种场景逐个拆</h2>
+<div class="section">
+  <p>M15 盯盘时你会遇到以下六种结构场景，每种该怎么处理：</p>
+
+  <h3>场景一：趋势起步期 — 刚出 CHoCH</h3>
+  <div class="blue">
+    <p><strong>你看到：</strong>M15 刚出了一个 CHoCH（金黄色线），方向和 H1 一致</p>
+    <p><strong>这意味着：</strong>M15 级别趋势刚刚转向，是最早的进场机会</p>
+    <p><strong>怎么做：</strong>等价格回调到 CHoCH 附近的 Zone ①，三面板确认后进场</p>
+    <p><strong>波段目标：</strong>CHoCH 到反方向最近 Zone 的距离</p>
+    <p><strong>仓位：</strong>波段回收 V2 信号一致 → 0.03手；不确定 → 0.01手试探</p>
+  </div>
+
+  <h3>场景二：趋势中段 — BOS 连续突破</h3>
+  <div class="success">
+    <p><strong>你看到：</strong>BOS 线连续出现在同一方向，Zone 被一个个突破</p>
+    <p><strong>这意味着：</strong>趋势正在加速，EA 金字塔加仓的甜区</p>
+    <p><strong>怎么做：</strong>每次回调到新形成的 Zone ① 就找入场。BOS 方向 = EA 金字塔加速方向</p>
+    <p><strong>波段回收面板：</strong>如果显示"回收<70% + 方向一致" = 最佳确认</p>
+    <p><strong>这是你赚钱最多的阶段，要积极。</strong></p>
+  </div>
+
+  <h3>场景三：趋势末段 — 反弹力度衰减</h3>
+  <div class="highlight">
+    <p><strong>你看到：</strong>波段回收面板显示回收比例在下降（比如从 80% → 65% → 50%）</p>
+    <p><strong>或者看到：</strong>威科夫面板出现"没油了" + 连续"拉锯"</p>
+    <p><strong>这意味着：</strong>趋势方向的力量在衰竭，可能接近末段</p>
+    <p><strong>怎么做：</strong>可以轻仓顺势做（0.01试探仓），但不要加大仓位。准备转向</p>
+    <p><strong>⚠️ 这是"接最后一棒"的危险区——你最怕的场景</strong></p>
+  </div>
+
+  <h3>场景四：反转初期 — CHoCH + V形反弹</h3>
+  <div class="danger">
+    <p><strong>你看到：</strong>波段回收面板出现"🟢反转做多"（估算回收>100%），或 M15 出了反方向 CHoCH</p>
+    <p><strong>这意味着：</strong>市场力量可能已经反转，但还没完全确认</p>
+    <p><strong>怎么做：</strong>用 0.01 试探仓跟新方向。等 BOS 确认后再加到 0.03</p>
+    <p><strong>绝对不要：</strong>在这个阶段用满仓逆原趋势做——万一是假反转会被双向马丁夹杀</p>
+  </div>
+
+  <h3>场景五：震荡区 — 价格在两个 Zone 之间来回</h3>
+  <div class="blue">
+    <p><strong>你看到：</strong>HH/HL/LH/LL 混乱，波段回收面板 😴震荡，威科夫面板"冷清"或"拉锯"</p>
+    <p><strong>这意味着：</strong>市场没方向，等待突破</p>
+    <p><strong>怎么做：</strong>到上沿供给区做空、到下沿需求区做多（高抛低吸）。或者干脆不做，等突破</p>
+    <p><strong>EA 用震荡参数（TP=$13）。</strong>波段回收指标此时不适用，靠 SMC + 威科夫判断</p>
+  </div>
+
+  <h3>场景六：EA 保本损后重入场</h3>
+  <div class="highlight">
+    <p><strong>你看到：</strong>EA 频繁保本止损出场再重入</p>
+    <p><strong>这意味着：</strong>行情在你的入场价附近来回扫</p>
+    <p><strong>规则：</strong>连续 2 次 PyrBE 被扫 → <strong>暂停进场</strong></p>
+    <p><strong>等什么：</strong>等价格回到新的 Zone 或 M15 出新 CHoCH 再重新评估</p>
+    <p><strong>不要：</strong>被扫 2 次后马上第 3 次冲进去（组8 的教训）</p>
+  </div>
+</div>
+
+<!-- ==================== 6. M3 抠价格 ==================== -->
+<h2>六、M3 — 抠价格（仅 M15 确认后才看）</h2>
+<div class="section">
+  <p>M15 SMC 条件满足 + 威科夫不是禁手，确定了做多/做空和目标 Zone。现在切到 M3 找精确入场价。</p>
+
+  <div class="two-col">
+    <div>
+      <h3>M3 上看什么</h3>
+      <p>1. <strong>M3 的 CHoCH</strong> — 最后确认方向</p>
+      <p style="margin-left:16px;">M15 说做多 → M3 上等出多头 CHoCH 再按下买入</p>
+      <p>2. <strong>M3 Zone ① 精确价位</strong></p>
+      <p style="margin-left:16px;">在 M15 Zone 范围内，M3 会有更精细的小 Zone</p>
+      <p>3. <strong>威科夫 M3 面板</strong></p>
+      <p style="margin-left:16px;">"假跌破(底部买盘)" = 做多确认<br>"假突破(顶部卖压)" = 做空确认</p>
+    </div>
+    <div>
+      <h3>M3 入场清单</h3>
+      <p>✅ M15 Zone ① + SMC满足 + 威科夫无禁手</p>
+      <p>✅ M3 出了同方向 CHoCH 或威科夫确认</p>
+      <p>✅ 入场价在 M3 Zone ①</p>
+      <p>✅ 止损放在 Zone 外侧</p>
+      <p>→ <strong>手动开首仓，EA 接管后续</strong></p>
+      <div class="sep"></div>
+      <p class="dim">M3 只用于精确入场价，不用于判断方向。方向已经在 H1+M15 确定了。如果 M3 上找不到好的入场，说明 M15 的信号还不够成熟，等一等。</p>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== 7. 趋势尾声禁手规则 ==================== -->
+<h2>七、趋势尾声 + 禁手对照表（直接对照执行）</h2>
+<div class="section">
+  <p>这是最关键的一张表——<strong>什么时候必须停手</strong>。每个信号对应唯一动作，不需要思考。</p>
+
+  <h3>🔴 硬禁手（出现任一条 → 立刻停手，不找借口）</h3>
+  <table>
+    <thead><tr><th>#</th><th>你看到什么</th><th>在哪看</th><th>为什么危险</th><th>恢复条件</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><strong>1</strong></td>
+        <td>M15 威科夫面板 <span class="tag tag-red">🔴 禁手</span><br>（连续3根缩量 或 蓄力/拉锯）</td>
+        <td>威科夫 V8.1 面板<br>行0 "判断"</td>
+        <td>连续缩量=市场没人交易，你进去没有对手盘推价格<br>蓄力/拉锯=方向没定，进去就是赌</td>
+        <td>面板从红变回绿/黄<br>（出现量比>1.5的放量K线）</td>
+      </tr>
+      <tr>
+        <td><strong>2</strong></td>
+        <td>H1 刚出 <span class="tag tag-gold">CHoCH</span><br>且方向与你持仓相反</td>
+        <td>H1 图表<br>金黄色横线</td>
+        <td>H1 CHoCH = 大方向可能反转<br>你还在旧方向开仓 = 逆势</td>
+        <td>H1 出新的同方向 BOS 确认<br>（证明 CHoCH 是假突破）</td>
+      </tr>
+      <tr>
+        <td><strong>3</strong></td>
+        <td>距反方向 Zone <strong>< $45</strong></td>
+        <td>波段回收 V2 面板<br>"仓位"行</td>
+        <td>马丁第1档需要 $35-45 空间<br>不够 = 马丁触发后硬止损</td>
+        <td>价格回到有 >$45 空间的位置</td>
+      </tr>
+      <tr>
+        <td><strong>4</strong></td>
+        <td>连续 <strong>2 次 PyrBE 被扫</strong></td>
+        <td>EA 交易记录<br>连续保本止损出场</td>
+        <td>价格在你入场区间来回拉锯<br>第3次进去大概率还是被扫</td>
+        <td>M15 出新 CHoCH 或价格离开当前区间 >$15</td>
+      </tr>
+      <tr>
+        <td><strong>5</strong></td>
+        <td><strong>30分钟内</strong>有非农/CPI/FOMC</td>
+        <td>财经日历</td>
+        <td>数据公布瞬间波动 $20-50<br>任何技术分析都无效</td>
+        <td>数据公布后 15 分钟<br>等第一波冲击消化完</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="sep"></div>
+
+  <h3>🟠 趋势尾声警告（出现 2 条以上 → 只用 0.01 试探仓 或 不做）</h3>
+  <table>
+    <thead><tr><th>#</th><th>你看到什么</th><th>在哪看</th><th>含义（大白话）</th><th>单独出现怎么做</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><strong>A</strong></td>
+        <td>M15 威科夫出现 <span class="tag tag-blue">"竭"(没劲了)</span><br>蓝色标记在趋势方向K线上</td>
+        <td>M15 K线上方<br>蓝色"竭"字</td>
+        <td>前面爆量冲刺，现在缩量窄幅 = 动力耗尽<br>就像百米冲刺后在喘气</td>
+        <td>收紧止损，不加仓<br>不要追趋势方向</td>
+      </tr>
+      <tr>
+        <td><strong>B</strong></td>
+        <td>M15 威科夫出现 <span class="tag tag-purple">"蓄"(蓄力)</span><br>紫色标记</td>
+        <td>M15 K线上方<br>紫色"蓄"字</td>
+        <td>量大但价格不动 = 有人在暗中憋大招<br>可能反转也可能加速，<strong>方向还没定</strong></td>
+        <td>等下一根K线突破方向<br>放量突破哪边跟哪边</td>
+      </tr>
+      <tr>
+        <td><strong>C</strong></td>
+        <td>M15 连续 2+ 根 <span class="tag tag-gold">"锯"(拉锯)</span><br>橙色标记</td>
+        <td>M15 K线上方<br>橙色"锯"字</td>
+        <td>多空在拼命打架，谁也赢不了<br>连续拉锯 = 大行情前兆但方向未明</td>
+        <td>不进场，等分出胜负<br>哪边突破跟哪边</td>
+      </tr>
+      <tr>
+        <td><strong>D</strong></td>
+        <td>波段回收面板显示<br>回收比例 <strong>连续 3 波下降</strong><br>（如 80% → 65% → 50%）</td>
+        <td>波段回收 V2 面板<br>"结构"行</td>
+        <td>趋势方向的每次反弹/回调力度越来越弱<br>= 趋势力量在一步步衰竭</td>
+        <td>只用试探仓（0.01）<br>准备转向</td>
+      </tr>
+      <tr>
+        <td><strong>E</strong></td>
+        <td>M15 威科夫出现 <span class="tag tag-red">"假突"(假突破)</span><br>在趋势<strong>顶部区域</strong></td>
+        <td>M15 K线上方<br>红色"假突"字</td>
+        <td>价格冲高但被打回来 = 上方有人大量卖出<br>如果在多头趋势顶部 = 多头可能到头了</td>
+        <td>多头持仓 → 收紧止损<br>不再追多</td>
+      </tr>
+      <tr>
+        <td><strong>F</strong></td>
+        <td>M15 威科夫出现 <span class="tag tag-green">"假跌"(假跌破)</span><br>在趋势<strong>底部区域</strong></td>
+        <td>M15 K线下方<br>绿色"假跌"字</td>
+        <td>价格被砸但被接住 = 下方有人大量买入<br>如果在空头趋势底部 = 空头可能到头了</td>
+        <td>空头持仓 → 收紧止损<br>不再追空</td>
+      </tr>
+      <tr>
+        <td><strong>G</strong></td>
+        <td>H1 威科夫面板 <span class="tag tag-blue">"竭"(没劲了)</span><br>+ 价格在 H4 供需区附近</td>
+        <td>H1 威科夫面板 +<br>H4 SMC 图表</td>
+        <td>大级别动力耗尽 + 碰到大级别阻力/支撑<br>= 趋势末段最危险的位置</td>
+        <td><strong>直接停手</strong>（升级为硬禁手）</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="highlight">
+    <strong>🧮 组合计数规则：</strong><br>
+    上面 A-G 中出现 <strong>1 条</strong> → 收紧止损，不加仓，可以继续持有<br>
+    出现 <strong>2 条</strong> → 只用 0.01 试探仓，或直接不做<br>
+    出现 <strong>3 条以上</strong> → 等同硬禁手，停手等结构重新明确
+  </div>
+
+  <div class="sep"></div>
+
+  <h3>典型趋势尾声信号链（按时间顺序出现）</h3>
+  <div class="blue">
+    <p>一个完整的趋势从强到弱通常是这样的：</p>
+    <p><strong>阶段1 趋势中段：</strong>K线放量（量比>1.5）+ 波幅大 + 方向明确 → 正常做</p>
+    <p><strong>阶段2 力度减弱：</strong>开始出现 <span class="tag tag-blue">"竭"</span>（没劲了）→ 收紧止损，不追</p>
+    <p><strong>阶段3 多空胶着：</strong>出现 <span class="tag tag-gold">"锯"</span>（拉锯）+ 波段回收比例下降 → 试探仓或不做</p>
+    <p><strong>阶段4 蓄力变盘：</strong>出现 <span class="tag tag-purple">"蓄"</span>（蓄力）→ 完全停手，等方向</p>
+    <p><strong>阶段5 假信号确认：</strong>出现 <span class="tag tag-red">"假突"</span> 或 <span class="tag tag-green">"假跌"</span> → 反转确认，准备换方向</p>
+    <p><strong>阶段6 新趋势：</strong>M15 出反方向 CHoCH → 新周期开始，回到流程第一步</p>
+  </div>
+</div>
+
+<!-- ==================== 8. 全场景闭环检查 ==================== -->
+<h2>八、全场景闭环检查 — 行情的每种可能你都有对策</h2>
+<div class="section">
+  <p>下面逐个列出你在 M15 上可能遇到的<strong>所有场景</strong>，确认每种都有明确的处理规则。</p>
+
+  <table>
+    <thead><tr><th>场景</th><th>你看到的信号组合</th><th>该做什么</th><th>用哪个指标判断</th></tr></thead>
+    <tbody>
+      <tr style="background:rgba(0,227,150,0.03)">
+        <td colspan="4" style="color:#50C878;font-weight:700;border-bottom:2px solid #50C878;">✅ 可以进场的场景</td>
+      </tr>
+      <tr>
+        <td>趋势起步<br>回调到位</td>
+        <td>M15 CHoCH 同方向 + Zone ① + 威科夫🟢 + 回收<70%</td>
+        <td><strong>0.03手进场</strong><br>最佳机会</td>
+        <td>SMC(CHoCH+Zone) + 威科夫(面板) + 回收V2(信号)</td>
+      </tr>
+      <tr>
+        <td>趋势中段<br>BOS后回调</td>
+        <td>BOS刚突破 + 新Zone ① + 威科夫放量 + 回收<70%</td>
+        <td><strong>0.03手进场</strong><br>EA金字塔甜区</td>
+        <td>SMC(BOS+Zone) + 威科夫(热度) + 回收V2</td>
+      </tr>
+      <tr>
+        <td>信号大部分OK<br>但有一项不确定</td>
+        <td>Zone ① + 两个面板绿 + 一个面板黄</td>
+        <td><strong>0.01手试探</strong><br>方向对了再加仓</td>
+        <td>三面板联合判断</td>
+      </tr>
+      <tr>
+        <td>V形反转<br>暴跌后急弹</td>
+        <td>回收V2 显示"🟢反转做多" + 回收>100%</td>
+        <td><strong>0.01手试探</strong><br>等BOS确认后加到0.03</td>
+        <td>回收V2(补丁B) + SMC(等CHoCH确认)</td>
+      </tr>
+      <tr>
+        <td>震荡区<br>到Zone边沿</td>
+        <td>H1震荡 + 价格到Zone ① + 威科夫有信号</td>
+        <td><strong>用震荡参数</strong><br>到上沿做空到下沿做多</td>
+        <td>SMC(Zone) + 威科夫(面板)</td>
+      </tr>
+
+      <tr style="background:rgba(254,176,25,0.03)">
+        <td colspan="4" style="color:#feb019;font-weight:700;border-bottom:2px solid #feb019;">🟡 等待 / 观望的场景</td>
+      </tr>
+      <tr>
+        <td>价格在<br>两个Zone中间</td>
+        <td>没有任何Zone在附近 + 无CHoCH/BOS</td>
+        <td><strong>什么都不做</strong><br>等价格走到Zone再看</td>
+        <td>SMC(看Zone距离)</td>
+      </tr>
+      <tr>
+        <td>威科夫<br>⚪等待</td>
+        <td>Zone ① 但威科夫面板无信号</td>
+        <td><strong>不进</strong><br>等威科夫出确认</td>
+        <td>威科夫(面板行0)</td>
+      </tr>
+      <tr>
+        <td>回收比例<br>在灰色地带</td>
+        <td>Zone ① + 威科夫🟢 + 回收70-85%</td>
+        <td><strong>0.01试探仓</strong><br>或等回收降到<70%</td>
+        <td>回收V2(结构行)</td>
+      </tr>
+      <tr>
+        <td>亚盘缩量</td>
+        <td>ATR < 12 + 威科夫面板"冷清" + 回收V2 "😴震荡"</td>
+        <td><strong>不做</strong><br>等欧盘放量后再看</td>
+        <td>回收V2(ATR) + 威科夫(热度)</td>
+      </tr>
+      <tr>
+        <td>蓄力出现<br>方向未定</td>
+        <td>威科夫"蓄" + 量大但价格不动</td>
+        <td><strong>等突破方向</strong><br>放量突破哪边跟哪边</td>
+        <td>威科夫(信号标记)</td>
+      </tr>
+      <tr>
+        <td>数据公布前</td>
+        <td>30分钟内有重要数据</td>
+        <td><strong>平仓或收紧止损</strong><br>不开新仓</td>
+        <td>财经日历</td>
+      </tr>
+
+      <tr style="background:rgba(255,69,96,0.03)">
+        <td colspan="4" style="color:#ff4560;font-weight:700;border-bottom:2px solid #ff4560;">🔴 必须停手的场景</td>
+      </tr>
+      <tr>
+        <td>趋势末段<br>多重衰竭信号</td>
+        <td>"竭" + "锯" + 回收比例连续下降（≥2条尾声警告）</td>
+        <td><strong>停手</strong><br>等新 CHoCH 出来</td>
+        <td>威科夫(标记) + 回收V2</td>
+      </tr>
+      <tr>
+        <td>H1 方向<br>与M15矛盾</td>
+        <td>H1 偏空但 M15 信号做多（或反过来）</td>
+        <td><strong>不做</strong><br>等两个周期方向一致</td>
+        <td>H1 结构 vs M15 信号</td>
+      </tr>
+      <tr>
+        <td>PyrBE<br>连续被扫</td>
+        <td>连续2次金字塔保本止损出场</td>
+        <td><strong>暂停进场</strong><br>等新CHoCH或价格离开区间</td>
+        <td>EA交易记录</td>
+      </tr>
+      <tr>
+        <td>马丁空间<br>不足</td>
+        <td>距反方向Zone < $45</td>
+        <td><strong>不开仓</strong></td>
+        <td>回收V2(仓位行)</td>
+      </tr>
+      <tr>
+        <td>H1"竭" +<br>H4供需区</td>
+        <td>H1没劲了 + 价格在H4大级别Zone附近</td>
+        <td><strong>不开仓 + 考虑反向</strong></td>
+        <td>威科夫H1 + SMC H4</td>
+      </tr>
+      <tr>
+        <td>威科夫<br>🔴禁手</td>
+        <td>面板行0显示红色禁手（缩量/蓄力/拉锯）</td>
+        <td><strong>手离鼠标</strong></td>
+        <td>威科夫(面板行0)</td>
+      </tr>
+
+      <tr style="background:rgba(0,143,251,0.03)">
+        <td colspan="4" style="color:#008ffb;font-weight:700;border-bottom:2px solid #008ffb;">🔄 特殊场景处理</td>
+      </tr>
+      <tr>
+        <td>数据行情<br>暴涨暴跌后</td>
+        <td>短时间内波动 >$30 + 量柱爆量</td>
+        <td><strong>等15分钟消化</strong><br>然后用正常流程重新评估</td>
+        <td>看K线形态冷静下来</td>
+      </tr>
+      <tr>
+        <td>跳空缺口<br>（周一开盘）</td>
+        <td>开盘价和上周收盘差 >$15</td>
+        <td><strong>等前30分钟</strong><br>看缺口是回补还是继续</td>
+        <td>SMC(FVG形成) + 威科夫(量)</td>
+      </tr>
+      <tr>
+        <td>连续亏损后<br>心态失控</td>
+        <td>连续2组亏损 + 想"扳回来"</td>
+        <td><strong>强制休息30分钟</strong><br>亏损后换方向 = 两方向都被马丁套</td>
+        <td>你自己的情绪</td>
+      </tr>
+      <tr>
+        <td>ATR 突变<br>（从震荡变趋势）</td>
+        <td>ATR 突破15 / 波段回收面板黄底"趋势参数!"</td>
+        <td><strong>切趋势 .set 文件</strong><br>TP从$13改$40</td>
+        <td>回收V2(参数行)</td>
+      </tr>
+      <tr>
+        <td>反向CHoCH<br>但回收>100%</td>
+        <td>M15 出反向CHoCH + 回收V2显示反转</td>
+        <td><strong>0.01试探跟新方向</strong><br>BOS确认后加仓</td>
+        <td>SMC(CHoCH) + 回收V2(补丁B)</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="danger" style="margin-top:16px;">
+    <strong>⚠️ 自检：如果你在盘中遇到一个场景不在上面表里 → 默认动作是"不做"。</strong><br>
+    不确定 = 不做。市场永远有下一次机会，你的本金只有一份。
+  </div>
+</div>
+
+<!-- ==================== 9. 完整流程图 ==================== -->
+<h2>九、完整操作流程（从开盘到入场）</h2>
+<div class="section">
+  <div class="flow">
+
+    <div class="flow-item">
+      <div class="flow-left">
+        <div class="flow-dot dot-blue">1</div>
+        <div class="flow-line line-blue"></div>
+      </div>
+      <div class="flow-right">
+        <div class="title">H1 扫一眼（10秒）</div>
+        <div class="desc">看 HH/HL/LH/LL 序列 + 威科夫面板 → 输出：今天偏多 / 偏空 / 震荡<br>如果 H1 刚出 CHoCH → 停下来重新评估</div>
+      </div>
+    </div>
+
+    <div class="flow-item">
+      <div class="flow-left">
+        <div class="flow-dot dot-gold">2</div>
+        <div class="flow-line line-gold"></div>
+      </div>
+      <div class="flow-right">
+        <div class="title">M15 找 Zone（1分钟）</div>
+        <div class="desc">找当前价上下最近的供需区 → 只看 ① 首次触及的 Zone<br>金边共振 Zone 优先级最高</div>
+      </div>
+    </div>
+
+    <div class="flow-item">
+      <div class="flow-left">
+        <div class="flow-dot dot-gold">3</div>
+        <div class="flow-line line-gold"></div>
+      </div>
+      <div class="flow-right">
+        <div class="title">M15 决策检查</div>
+        <div class="desc">
+          <strong>SMC（核心）：</strong>Zone ①？有 CHoCH/◆/FVG 确认？方向和 H1 一致？<br>
+          <strong>威科夫（熔断）：</strong>面板行0 是不是 🔴禁手？不是禁手就不阻拦<br>
+          <strong>波段回收（仓位）：</strong>回收<70%→0.03手 / 70-85%→0.01手 / >85%→不进<br>
+          → SMC满足 + 威科夫非禁手 = 进场；波段回收定仓位
+        </div>
+      </div>
+    </div>
+
+    <div class="flow-item">
+      <div class="flow-left">
+        <div class="flow-dot dot-gold">4</div>
+        <div class="flow-line line-gold"></div>
+      </div>
+      <div class="flow-right">
+        <div class="title">M15 马丁安全检查</div>
+        <div class="desc">当前价到反方向 Zone > $45？ → 是 = 继续；否 = 不进<br>波段回收面板"仓位"行有自动提示</div>
+      </div>
+    </div>
+
+    <div class="flow-item">
+      <div class="flow-left">
+        <div class="flow-dot dot-green">5</div>
+        <div class="flow-line line-green"></div>
+      </div>
+      <div class="flow-right">
+        <div class="title">M3 精确入场（可选）</div>
+        <div class="desc">切到 M3 → 等同方向 CHoCH 或威科夫确认 → 在 M3 Zone ① 开首仓<br>如果不看 M3，直接在 M15 Zone ① 触及时开首仓也可以</div>
+      </div>
+    </div>
+
+    <div class="flow-item">
+      <div class="flow-left">
+        <div class="flow-dot dot-green">6</div>
+        <div class="flow-line line-green" style="min-height:0;"></div>
+      </div>
+      <div class="flow-right">
+        <div class="title">手动开首仓 → EA 接管</div>
+        <div class="desc">开完首仓后不要动。EA V6.14 自动管理金字塔、锁利、追踪止盈<br>M15 威科夫面板变 🔴禁手 → 手动收紧止损<br>ATR 突破 15 → 切趋势参数 .set 文件</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ==================== 8. ATR 参数切换 ==================== -->
+<h2>十、ATR 参数切换速查</h2>
+<div class="section">
+  <table>
+    <thead><tr><th></th><th>震荡参数（ATR < 15）</th><th>趋势参数（ATR > 15）</th></tr></thead>
+    <tbody>
+      <tr><td><strong>TP(止盈)</strong></td><td>$13</td><td>$40</td></tr>
+      <tr><td><strong>Lock(锁利)</strong></td><td>触发$3.5 / 保留$3.0</td><td>触发$8.0 / 保留$6.0</td></tr>
+      <tr><td><strong>Trail(追踪)</strong></td><td>启动$4.5 / 回撤20%</td><td>启动$12 / 回撤35%</td></tr>
+      <tr><td><strong>马丁D1</strong></td><td>$35 / 0.03手</td><td>$45 / 0.06手</td></tr>
+      <tr><td><strong>硬止损</strong></td><td colspan="2" style="text-align:center;">$660（两套都一样）</td></tr>
+    </tbody>
+  </table>
+  <p class="dim">波段回收 V2 面板的"参数"行会在 ATR 突破 15 时黄底高亮提醒你切换。鼠标悬停可看当前该用哪套具体参数。</p>
+</div>
+
+<!-- ==================== 9. 一页速查 ==================== -->
+<h2>十一、一页速查（建议截图贴屏幕旁）</h2>
+<div class="section" style="background:#0d1320;">
+  <table>
+    <thead><tr><th>步骤</th><th>看哪里</th><th>判断什么</th><th>结果 → 动作</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><strong>1</strong></td>
+        <td>H1 结构序列 + 威科夫面板</td>
+        <td>多头还是空头？</td>
+        <td>HH+HL=只做多 / LH+LL=只做空 / 混乱=震荡高抛低吸</td>
+      </tr>
+      <tr>
+        <td><strong>2</strong></td>
+        <td>M15 Zone 触及次数</td>
+        <td>有没有 ① Zone？</td>
+        <td>有① → 第3步 / 没有 → 等价格走到Zone再看</td>
+      </tr>
+      <tr>
+        <td><strong>3</strong></td>
+        <td>SMC + 威科夫面板</td>
+        <td>SMC满足？威科夫禁手？</td>
+        <td>SMC满足+非禁手=进场 / 威科夫🔴禁手=不做</td>
+      </tr>
+      <tr>
+        <td><strong>4</strong></td>
+        <td>波段回收面板"仓位"行</td>
+        <td>仓位多大？马丁余量？</td>
+        <td>回收<70%=0.03手 / 70-85%=0.01手 / >85%或余量<$45=不开</td>
+      </tr>
+      <tr>
+        <td><strong>5</strong></td>
+        <td>M3 CHoCH + 威科夫</td>
+        <td>精确入场位在哪？</td>
+        <td>M3 Zone ① + 同方向确认 → 开首仓</td>
+      </tr>
+      <tr>
+        <td><strong>6</strong></td>
+        <td>EA 面板</td>
+        <td>EA 已接管</td>
+        <td>不动 / 威科夫变禁手→收紧 / ATR>15→切参数</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div style="text-align:center;margin-top:16px;padding:12px;background:rgba(255,215,64,0.08);border-radius:8px;">
+    <strong style="color:#FFD740;font-size:15px;">核心原则：红灯=手离鼠标。绿灯=准备但不追。Zone到位=进场。其余时间=什么都不做。</strong>
+  </div>
+</div>
+
+</div>
+</body>
+</html>
