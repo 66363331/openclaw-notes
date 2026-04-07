@@ -93,6 +93,26 @@ def search(
         }
 
 
+def get_tavily_key_from_config():
+    """Read Tavily API key from openclaw.json config"""
+    config_paths = [
+        os.path.expanduser("~/.openclaw/openclaw.json"),
+        "/home/lilei/.openclaw/openclaw.json"
+    ]
+    for path in config_paths:
+        try:
+            with open(path) as f:
+                d = json.load(f)
+            entries = d.get("skills", {}).get("entries", {})
+            tavily_cfg = entries.get("tavily", {})
+            key = tavily_cfg.get("apiKey", "")
+            if key and key.startswith("tvly-"):
+                return key
+        except:
+            pass
+    return None
+
+
 def main():
     parser = argparse.ArgumentParser(
         description="Tavily AI Search - Optimized search for LLMs",
@@ -189,7 +209,7 @@ Environment Variables:
     args = parser.parse_args()
     
     # Get API key from args or environment
-    api_key = args.api_key or os.getenv("TAVILY_API_KEY")
+    api_key = args.api_key or os.getenv("TAVILY_API_KEY") or get_tavily_key_from_config()
     
     result = search(
         query=args.query,
@@ -245,3 +265,12 @@ Environment Variables:
 
 if __name__ == "__main__":
     main()
+
+
+def get_tavily_key_from_config():
+    """Read Tavily API key from openclaw.json config"""
+    import os
+    config_paths = [
+        os.path.expanduser("~/.openclaw/openclaw.json"),
+        "/home/lilei/.openclaw/openclaw.json"
+    ]

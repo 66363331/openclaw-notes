@@ -1,0 +1,15 @@
+{
+  "name": "xauusd_tick_data",
+  "version": "1.0.0",
+  "description": "",
+  "main": "download_m1.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "dukascopy-node": "^1.46.4"
+  }
+}
